@@ -76,16 +76,13 @@ const splitAndSendSegments = async (base64Text, key) => {
 
 
 export const transcibedAudio = async (audioFile) => {
-  // const apiKey = "AIzaSyA17EgR12viKVmi00ZjTWL0HYVP_pZpZyc";
   const apiKey = process.env.REACT_APP_APIKEY
   
   let sizeFile = bytesToMegabytes(audioFile.audio[0].size);
   let transcriptText = '';
- 
 
     if (sizeFile > 1) {
       const base64Audio = await audioBlobToBase64(audioFile.audio[0]);
-
       const response = await splitAndSendSegments(base64Audio, apiKey)
       .then(results => {
         console.log('Todos los segmentos han sido enviados correctamente.');
