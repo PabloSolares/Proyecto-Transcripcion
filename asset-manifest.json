@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Proyecto-Transcripcion/static/css/main.e6c13ad2.css",
+    "main.js": "/Proyecto-Transcripcion/static/js/main.3a6cb9b5.js",
+    "index.html": "/Proyecto-Transcripcion/index.html",
+    "main.e6c13ad2.css.map": "/Proyecto-Transcripcion/static/css/main.e6c13ad2.css.map",
+    "main.3a6cb9b5.js.map": "/Proyecto-Transcripcion/static/js/main.3a6cb9b5.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.3a6cb9b5.js"
+  ]
+}
