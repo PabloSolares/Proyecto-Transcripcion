@@ -80,8 +80,7 @@ const splitAndSendSegments = async (base64Text, key) => {
 
 
 export const transcibedAudio = async (audioFile) => {
-  const apiKey = process.env.REACT_APP_APIKEY
-  
+  const apiKey = "AIzaSyA17EgR12viKVmi00ZjTWL0HYVP_pZpZyc";
   let sizeFile = bytesToMegabytes(audioFile.audio[0].size);
   let transcriptText = '';
  // Verificar si el tamaño del archivo es mayor que 1MB
