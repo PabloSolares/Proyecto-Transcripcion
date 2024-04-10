@@ -94,7 +94,6 @@ export const transcibedAudio = async (audioFile) => {
         results.forEach((e) => {
           if (e.results && e.results.length >= 0 ) {
             for (let i = 0; i < e.results.length; i++) {
-              console.log(e.results[0])
 
               transcriptText += e.results[i].alternatives[0].transcript; 
               

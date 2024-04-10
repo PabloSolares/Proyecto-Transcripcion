@@ -32,22 +32,23 @@ export const Inicio = () => {
   };
 
   return (
-    <div id="content">
+    <div id="content" className="container mt-5">
       <h1>Transcripción</h1>
 
-      <form
-        onSubmit={handleSubmit(onSubmit)} /*action="/upload" method="post"*/
-      >
-        <label>Seleccionar documento:</label>
-        <input
-          type="file"
-          id="audio"
-          name="audio"
-          {...register("audio", { required: true })}
-          accept=".mp3, .wav, .ogg"
-        />
+      <form onSubmit={handleSubmit(onSubmit)} className="mb-3">
+        <div className="form-group">
+          <label><h4>Seleccionar documento:</h4></label>
+          <input
+            type="file"
+            id="audio"
+            name="audio"
+            {...register("audio", { required: true })}
+            accept=".mp3, .wav, .ogg"
+            className="form-control-file"
+          />
+        </div>
 
-        <button type="submit" value="Enviar">
+        <button type="submit" value="Enviar" className="btn btn-primary">
           Cargar Documento
         </button>
       </form>
@@ -55,14 +56,17 @@ export const Inicio = () => {
       {
         // Mostrar mensaje de error si el campo de audio no se ha completado
         errors.audio?.type === "required" ? (
-          <p>El campo audio es requerido</p>
+          <p className="text-danger">El campo audio es requerido</p>
         ) : text ? ( // Mostrar texto transcribido si está disponible
-          <div>
-            <h3>Transcripción:</h3> <p>{text}</p>
+          <div className="card mt-3">
+            <div className="card-body">
+              <h3 className="card-title">Transcripción:</h3>
+              <p className="card-text text-justify text-wrap">{text}</p>
+            </div>
           </div>
         ) : (
           // Mostrar mensaje de selección de documento si no hay texto transcribido
-          <h4>Selecciona un documento</h4>
+          <h4 className="text-danger">Selecciona un documento</h4>
         )
       }
     </div>
