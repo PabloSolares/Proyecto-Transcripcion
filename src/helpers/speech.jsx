@@ -40,7 +40,7 @@ const splitBase64Text =  (base64Text) => {
 }
 
 // Función para dividir un texto base64 de audio en segmentos y enviarlos a la API
-const splitAndSendSegments = async (base64Text, key) => {
+const splitAndSendSegments = async (base64Text, key, lan) => {
   const segmentSize = 1024 * 1024; // 1MB
   const totalSegments = Math.ceil(base64Text.length / segmentSize);
   const segmentsArray = [];
@@ -60,8 +60,8 @@ const splitAndSendSegments = async (base64Text, key) => {
             sampleRateHertz: 48000,
             useEnhanced: true,
             enableAutomaticPunctuation: true,
-            languageCode: "es-GT",
-            // enableWordTimeOffsets: true
+            languageCode: lan,
+            enableWordTimeOffsets: true
           },
           audio: {
             content: await e,
@@ -88,8 +88,8 @@ export const transcibedAudio = async (audioFile) => {
       // Convertir el blob de audio a base64 usando la funcion audioBlobToBase64
       const base64Audio = await audioBlobToBase64(audioFile.audio[0]);
       // Dividir el audio base64 en segmentos y enviarlos a la API
-      const response = await splitAndSendSegments(base64Audio, apiKey)
-      .then(results => {        
+      const response = await splitAndSendSegments(base64Audio, apiKey, audioFile.language)
+      .then(results => {   
         // Procesar los resultados y concatenar las transcripciones
         results.forEach((e) => {
           if (e.results && e.results.length >= 0 ) {
@@ -115,7 +115,7 @@ export const transcibedAudio = async (audioFile) => {
           sampleRateHertz: 48000,
           useEnhanced: true,
           enableAutomaticPunctuation: true,
-          languageCode: "es-GT",
+          languageCode: audioFile.language,
           enableWordTimeOffsets: true
         },
         audio: {
