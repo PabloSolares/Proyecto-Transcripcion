@@ -5,46 +5,37 @@ import { LoadingSpinner } from "./LoadingSpinner";
 import { ShowTranscripcion } from "./showTranscripcion";
 
 function calculateWER(referenceText, generatedText) {
-  // Convertir los textos en arrays de palabras, incluyendo signos de puntuación
-  const referenceWords = referenceText
-    .trim()
-    .split(/\s+|[.,;!?]+/)
-    .filter(Boolean);
-  const generatedWords = generatedText
-    .trim()
-    .split(/\s+|[.,;!?]+/)
-    .filter(Boolean);
+ // Convertir los textos en arrays de palabras
+ const referenceWords = referenceText.trim().toLowerCase().match(/\b\w+\b/g);
+ const generatedWords = generatedText.trim().toLowerCase().match(/\b\w+\b/g);
 
-  // Longitud de los textos
-  const referenceLength = referenceWords.length;
-  const generatedLength = generatedWords.length;
+ // Si alguno de los textos es nulo, retornar un WER del 100%
+ if (!referenceWords || !generatedWords) {
+   return 100;
+ }
 
-  // Función para calcular la distancia de Levenshtein entre dos arreglos de palabras
-  function levenshteinDistance(s1, s2) {
-    const costs = new Array(s2.length + 1).fill(0).map((_, i) => i);
-    for (let i = 1; i <= s1.length; i++) {
-      let prevCost = i - 1;
-      costs[0] = i;
-      for (let j = 1; j <= s2.length; j++) {
-        const currentCost =
-          s1[i - 1] === s2[j - 1]
-            ? prevCost
-            : Math.min(prevCost, costs[j - 1], costs[j]) + 1;
-        prevCost = costs[j];
-        costs[j] = currentCost;
-      }
-    }
-    return costs[s2.length];
-  }
+ // Longitud de los textos
+ const referenceLength = referenceWords.length;
+ const generatedLength = generatedWords.length;
 
-  // Calcular la distancia de Levenshtein entre los textos de referencia y generados
-  const distance = levenshteinDistance(referenceWords, generatedWords);
+ // Calcular la distancia entre los textos de referencia y generados
+ let distance = 0;
 
-  // Calcular el WER como el porcentaje de distancia de Levenshtein respecto a la longitud del texto de referencia
-  const WER = distance / referenceLength;
-  const roundedWER = Math.round(WER * 100 * 100) / 100; // Redondear a 2 decimales
+ // Crear un conjunto de palabras únicas en el texto de referencia
+ const referenceSet = new Set(referenceWords);
 
-  return roundedWER;
+ // Comparar las palabras del texto generado con las del texto de referencia
+ generatedWords.forEach(word => {
+   if (!referenceSet.has(word)) {
+     distance++;
+   }
+ });
+
+ // Calcular el WER como el porcentaje de palabras incorrectas respecto a la longitud del texto de referencia
+ const WER = distance / referenceLength * 100;
+ const roundedWER = Math.round(WER * 100) / 100; // Redondear a 2 decimales
+
+ return roundedWER;
 }
 
 const comparacion = (transcripcion1, transcripcion2) => {
@@ -182,10 +173,11 @@ export const Inicio = () => {
               {
                 <h3>
                   Tasa de error de la transcripción:{" "}
-                  {calculateWER(text[1].text, text[0].text)}%
+                  {calculateWER(text[1].text, text[2].text)}%
                 </h3>
               }
               {text.map((e, i) => {
+                console.log(e)
                 return (
                   <div className="col-md-6">
                     <ShowTranscripcion
@@ -198,10 +190,10 @@ export const Inicio = () => {
                 );
               })}
 
-              {calculateWER(text[1].text, text[0].text) === 0 ? (
+              {calculateWER(text[1].text, text[2].text) === 0 ? (
                 <h3>No hay errores</h3>
               ) : (
-                comparacion(text[0].text, text[1].text).map((e, i) => {
+                comparacion(text[1].text, text[2].text).map((e, i) => {
                   return (
                     <div className="col-md-6">
                       <ShowTranscripcion
